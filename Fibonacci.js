@@ -53,8 +53,8 @@ function fibonacciValue(index) {
   }
   
 // const index = fibonacciIndex(13);
-const value = fibonacciRecursiveValue(400)
-// const value = fibonacciValue(45)
+// const value = fibonacciRecursiveValue(43)
+const value = fibonacciValue(700)
 
 
 console.log(value);
