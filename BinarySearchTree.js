@@ -187,6 +187,51 @@ class BinarySearchTree {
   isLeafNode(node) {
     return node.right === null && node.left === null;
   }
+
+  traverseBFS() {
+    if (this.root == null) {
+      return null;
+    }
+
+    let currentNode = null;
+    const list = [];
+    let queue = [];
+
+    queue.push(this.root);
+
+    while(queue.length > 0) {
+      currentNode = queue.shift();
+
+      traverseBFSNode(currentNode, list, queue);
+
+    }
+
+    return list;
+  }
+
+  traverseInOrder() {
+    //start from the leftmost leaf node and work up and right
+    return traverseInOrderNode(this.root, []);
+  }
+
+  traversePreOrder() {
+    //start from the leftmost leaf node and work up and right
+    return traversePreOrderNode(this.root, []);
+  }
+
+  traversePostOrder() {
+    //start from the leftmost leaf node and work up and right
+    return traversePostOrderNode(this.root, []);
+  }
+}
+
+function traverseBFSNode(node, list, queue) {
+  //push the current node value
+  list.push(node.value);
+
+  //store references to the children of the current node in the queue
+  if (node.left) queue.push(node.left);
+  if (node.right) queue.push(node.right);
 }
 
 function traverse(node) {
@@ -194,6 +239,59 @@ function traverse(node) {
   tree.left = node.left === null ? null : traverse(node.left);
   tree.right = node.right === null ? null : traverse(node.right);
   return tree;
+}
+
+function traverseInOrderNode(node, list) {
+  if (node.left) {
+    traverseInOrderNode(node.left, list);
+  }
+  list.push(node.value);
+  if(node.right) {
+    traverseInOrderNode(node.right, list);
+  }
+
+  return list;
+}
+
+function traversePreOrderNode(node, list) {
+  list.push(node.value);
+  if (node.left) {
+    traversePreOrderNode(node.left, list);
+  }
+  if(node.right) {
+    traversePreOrderNode(node.right, list);
+  }
+
+  return list;
+}
+
+function traversePostOrderNode(node, list) {
+  if (node.left) {
+    traversePostOrderNode(node.left, list);
+  }
+  if(node.right) {
+    traversePostOrderNode(node.right, list);
+  }
+  list.push(node.value);
+
+  return list;
+}
+
+function validateBFSTree(tree) {
+  return validateBFSNode(tree.root);
+}
+
+function validateBFSNode(node) {
+  if (node == null) {
+    return true;
+  }
+
+  // console.log(node);
+  let leftValidated = node.left ? validateBFSNode(node.left) : true;
+  let rightValidated = node.right ? validateBFSNode(node.right) : true;
+
+  return leftValidated && rightValidated && (node.left ? node.left.value < node.value : true) && 
+    (node.right ? node.right.value > node.value : true);
 }
 
 const tree = new BinarySearchTree(9);
@@ -204,4 +302,11 @@ tree.insert(170);
 tree.insert(15);
 tree.insert(1);
 JSON.stringify(traverse(tree.root));
-tree.lookup(20);
+// tree.lookup(20);
+
+// console.log(tree.traverseBFS());
+// console.log(tree.traverseInOrder());
+// console.log(tree.traversePreOrder());
+// console.log(tree.traversePostOrder());
+
+console.log(validateBFSNode(tree.root));
