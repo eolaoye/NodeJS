@@ -1,85 +1,102 @@
-var treeNode = function (val, left, right) {
-    this.value = val;
-    this.left = left;
-    this.right = right;
-  }
-  
-  var tree = function (input) {
-      this.root = new treeNode(input[0]);
-      
-      let currentNode = this.root;
-      let queue = [];
-      fillTreeNode(currentNode, input[1], input[2], queue);
-      let index = 3;
-      let queueIndex = 0;
-      while(index < input.length) {
-        console.log('Queue', queue);
-        console.log('Current Node', currentNode);
-        currentNode = queue[queueIndex];
-        fillTreeNode(currentNode, input[index], input[index+1], queue);
-        index += 2;
-        queueIndex++;
-      }
-      console.log('Queue', queue);
-      console.log('Current Node', currentNode);
-  }
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+ function validateBFS(node, minValue, maxValue) {
+    console.log('node value: ', node.val, '; min value: ', minValue, '; max value: ', maxValue);
 
-  function fillTreeNode(node, leftValue, rightValue, queue) {
-      node.left = new treeNode();
-      node.right = new treeNode();      
-      node.left.value = leftValue;
-      node.right.value = rightValue;
-
-      queue.push(node.left);
-      queue.push(node.right);
-  }
-  
-  function validateNode(node) {
-    if (node == null) {
-      return true;
+    if (node.left && node.left.val) {
+        if (node.left.val >= node.val) {
+            return false;
+        }
     }
-
-    if (!(node.left ? node.left.value < node.value : true) || 
-    !(node.right ? node.right.value < node.value : true)) {
-        return false;
+    if (node.right && node.right.val) {
+        if (node.right.val <= node.val) {
+            return false;
+        }
     }
-  
-    // console.log(node);
-    let leftValidated = node.left ? validateNode(node.left) : true;
-    let rightValidated = node.right ? validateNode(node.right) : true;
-  
-    return leftValidated && rightValidated;
-  }
-  
-  
-  var isValidBST1 = function(root) {
-    //build the BST first
-    const myTree = new tree(root);        
-    
-    return validateNode(myTree.root);
-};
-  
-var isValidBST = function(root) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-
-    for (let i = 0; i < root.length; i++) {
-
-        leftIndex = 2*i + 1;
-        rightIndex = 2*i + 2;
-
-        if (leftIndex < root.length && rightIndex < root.length) {            
-            if (root[leftIndex] !== null && root[leftIndex] > root[i]) {
-                return false;
-            }
-            if (root[rightIndex] !== null && root[i] > root[rightIndex]) {
-                return false;
-            }
+        
+    if (node.left) {
+        if (!validateBFS(node.left, minValue, node.val)) {
+            return false;
+        }
+    }
+        
+    if (node.right) {
+        if (!validateBFS(node.right, node.val, maxValue)) {
+            return false;
         }
     }
     
+    if (maxValue && node.val >= maxValue) {
+        return false;
+    }
+    
+    if (minValue && node.val <= minValue) {
+        return false;
+    }
+    
     return true;
+}
+
+var isValidBST = function(root) {
+    return validateBFS(root);
 };
 
-console.log(isValidBST([5,1,4,null,null,3,6]));
-console.log(isValidBST([5,1,7,null,null,6,8]));
+var TreeNode = function(val, left, right) {
+    this.val = (val===undefined ? 0 : val)
+    this.left = (left===undefined ? null : left)
+    this.right = (right===undefined ? null : right)
+}
+
+var MyTreeRoot = function(array) {
+    this.val = array[0];    
+    this.left = new TreeNode();
+    this.right = new TreeNode();
+
+    let currentNode = this;
+    let leftIndex = 0;
+    let rightIndex = 0;
+    let queue = [];
+    for (let i = 0; i < array.length; i++) {
+        // console.log('array[i]: ', array[i]);
+        // console.log('current node: ', currentNode);
+
+        if (!currentNode) {
+            currentNode = queue.shift();
+            continue;
+        }
+        
+        currentNode.val = array[i];
+
+        leftIndex = 2 * i + 1;
+        rightIndex = 2 * i + 2;
+
+        if (leftIndex < array.length) {
+            currentNode.left = array[leftIndex] ? new TreeNode(array[leftIndex]) : null;
+            queue.push(currentNode.left);
+        }
+        
+        if (rightIndex < array.length) {
+            currentNode.right = array[rightIndex] ? new TreeNode(array[rightIndex]) : null;
+            queue.push(currentNode.right);
+        }  
+        
+        // console.log('current node: ', currentNode);
+        // console.log('Queue: ', queue);
+        //set currentNode to next on the queue
+        currentNode = queue.shift();
+    }
+}
+const myTree = new MyTreeRoot([5,4,6,null,null,3,7]);
+console.log(myTree);
+
+console.log(validateBFS(myTree));
