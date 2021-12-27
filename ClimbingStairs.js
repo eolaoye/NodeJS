@@ -33,7 +33,7 @@
 //             return cache[n-3];
 //         }
 
-//         cache.push(2 + climb(n-2) + climb(n-1));
+//         cache.push(climb(n-2) + climb(n-1));
 
 //         console.log(cache);
 //         return cache[n-3];
@@ -42,6 +42,8 @@
 
 // var climbStairs = memoizedClimb();
 
+
+//top down recursive memoization
 let cache = [];
 var climbStairs = function (n) {
 
@@ -60,4 +62,22 @@ var climbStairs = function (n) {
     
 };
 
-console.log(climbStairs(6));
+//bottom up non recursive memoization
+var climbStairs2 = function (n) {
+
+    if (n < 3) {
+        return n;
+    }
+
+    let cache = [1,2];
+
+    for (let i = 3; i <= n; i++) {
+        cache.push(cache[i-2] + cache[i-3]);
+        console.log(cache);
+    }
+    return cache[n-1];
+    
+};
+
+console.log(climbStairs(4));
+console.log(climbStairs2(4));
