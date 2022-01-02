@@ -26,3 +26,5 @@ const nums1 = [3,2,4];
 const target1 = 6;
 
 console.log(twoSum(nums1, target1));
+
+module.exports = twoSum;
