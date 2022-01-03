@@ -1,5 +1,5 @@
-const fs = require('fs');
-const chalk = require('chalk');
+import fs from "fs";
+import chalk from "chalk";
 
 function addNote(title, body) {
 
@@ -82,9 +82,10 @@ function saveNotes(notes) {
     fs.writeFileSync('NoteStore.json', JSON.stringify(notes));
 }
 
-module.exports = {
-    addNote: addNote,
-    displayNote: displayNote,
-    removeNote: removeNote,
-    listNotes: listNotes
-}
+export { addNote, displayNote, removeNote, listNotes };
+// module.exports = {
+//     addNote: addNote,
+//     displayNote: displayNote,
+//     removeNote: removeNote,
+//     listNotes: listNotes
+// }

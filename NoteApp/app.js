@@ -1,6 +1,9 @@
 
-const yargs = require('yargs');
-const notes = require('./Notes.js');
+import _yargs from 'yargs';
+import { hideBin } from 'yargs/helpers'
+import * as notes from "./Notes.js";
+
+const yargs = _yargs(hideBin(process.argv))
 
 yargs.version('1.0.1');
 yargs.command({
@@ -18,7 +21,7 @@ yargs.command({
             type: 'string'
         }
     },
-    handler: function(argv) {
+    handler(argv) {
         notes.addNote(argv.title, argv.body);
     }
 })
