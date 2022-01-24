@@ -8,7 +8,7 @@ function mergeSort(array) {
     //extract the first half of the array into the left array
     const leftHalf = array.splice(0, Math.ceil(array.length / 2));
 
-    //splice removes the elements and 
+    //splice removes the elements and returns an array of the removed elements
 
     return merge(
         mergeSort(leftHalf),
